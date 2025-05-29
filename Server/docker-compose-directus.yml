@@ -84,6 +84,8 @@ services:
       # Add AWS region (required by the SDK)
       AWS_REGION: us-east-1
       CITRINEOS_UTIL_FILEACCESS_DIRECTUS_TOKEN: 'MY_DIRECTUS_STATIC_TOKEN'
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_EXPORTER_OTLP_METRICS_PROTOCOL: http/protobuf
 
     depends_on:
       ocpp-db:
@@ -146,13 +148,13 @@ services:
     restart: always
     environment:
       ## postgres database to store Hasura metadata
-      HASURA_GRAPHQL_DATABASE_URL: postgres://citrine:citrine@host.docker.internal:5432/citrine
+      HASURA_GRAPHQL_DATABASE_URL: postgres://citrine:citrine@ocpp-db:5432/citrine
       ## enable the console served by server
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'true' # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
       HASURA_GRAPHQL_DEV_MODE: 'true'
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ENABLE_TELEMETRY: 'false'
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: 'true'
       ## uncomment next line to run console offline (i.e load console assets from server instead of CDN)
       # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       ## uncomment next line to set an admin secret
@@ -176,8 +178,11 @@ services:
     environment:
       QUARKUS_LOG_LEVEL: ERROR # FATAL, ERROR, WARN, INFO, DEBUG, TRACE
       ## https://quarkus.io/guides/opentelemetry#configuration-reference
-      QUARKUS_OPENTELEMETRY_ENABLED: 'false'
-      ## QUARKUS_OPENTELEMETRY_TRACER_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
+      QUARKUS_OPENTELEMETRY_ENABLED: 'true'
+      # QUARKUS_OPENTELEMETRY_TRACER_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
+      QUARKUS_OPENTELEMETRY_TRACER_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_METRICS_PROTOCOL: http/protobuf
     depends_on:
       ocpp-db:
         condition: service_healthy
@@ -191,6 +196,15 @@ services:
       timeout: 10s
       retries: 5
       start_period: 5s
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    volumes:
+      - ./otel-collector-config.yml:/etc/otelcol/config.yaml
+    ports:
+      - "4318:4318"
+      - "4317:4317"
+      - "9464:9464"
 
 volumes:
   db_data:

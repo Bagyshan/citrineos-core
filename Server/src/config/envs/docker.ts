@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: Apache 2.0
 
-import { defineConfig, OCPP2_0_1, OCPP1_6 } from '@citrineos/base';
+import { OCPP1_6, OCPP2_0_1, defineConfig } from '@citrineos/base';
+
 import path from 'path';
 
 export function createDockerConfig() {

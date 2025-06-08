@@ -18,6 +18,7 @@ services:
       #   - EVEREST_IMAGE_TAG=${EVEREST_IMAGE_TAG}
       args:
         - EVEREST_TARGET_URL=ws://host.docker.internal:8081/cp001
+        # - EVEREST_TARGET_URL=ws://34.45.159.207/cp001
         - EVEREST_IMAGE_TAG=0.0.23 
     platform: linux/x86_64
     ports:

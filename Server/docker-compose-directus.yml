@@ -14,8 +14,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 3
-    networks:
-      - citrine-net
 
   ocpp-db:
     image: postgis/postgis:16-3.5

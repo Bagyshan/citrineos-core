@@ -132,7 +132,7 @@ services:
       DB_USER: 'citrine'
       DB_PASSWORD: 'citrine'
       WEBSOCKETS_ENABLED: 'true'
-      PUBLIC_URL: 'http://34.45.159.207/directus'
+      # PUBLIC_URL: 'http://34.45.159.207/directus'
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://127.0.0.1:8055/server/health || exit 1
       start_period: 15s
@@ -207,18 +207,18 @@ services:
       - "4317:4317"
       - "9464:9464"
 
-  nginx:
-    image: nginx:latest
-    container_name: citrine-nginx
-    depends_on:
-      - citrine
-      - directus
-      - graphql-engine
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    restart: always
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: citrine-nginx
+  #   depends_on:
+  #     - citrine
+  #     - directus
+  #     - graphql-engine
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   restart: always
 
 volumes:
   db_data:

@@ -2,7 +2,7 @@ ARG EVEREST_IMAGE_TAG=0.0.23
 
 FROM --platform=linux/x86_64 ghcr.io/everest/everest-demo/manager:${EVEREST_IMAGE_TAG}
 
-ARG EVEREST_TARGET_URL=host.docker.internal/cp001
+ARG EVEREST_TARGET_URL=ws://34.45.159.207:8081/cp001
 ENV EVEREST_TARGET_URL $EVEREST_TARGET_URL
 
 WORKDIR /workspace

@@ -18,7 +18,7 @@ services:
       #   - EVEREST_IMAGE_TAG=${EVEREST_IMAGE_TAG}
       args:
         # - EVEREST_TARGET_URL=ws://host.docker.internal:8081/cp001
-        - EVEREST_TARGET_URL=ws://34.45.159.207/cp001
+        - EVEREST_TARGET_URL=ws://34.45.159.207:8081/cp001
         - EVEREST_IMAGE_TAG=0.0.23 
     platform: linux/x86_64
     ports:
@@ -38,6 +38,8 @@ services:
       - 'host.docker.internal:host-gateway'
     networks:
       - everest
+    # volumes:
+    #   - /home/bagyshan/.nvm/versions/node/v24.1.0/bin/http-server:/workspace
 
   nodered:
     # image: ghcr.io/everest/everest-demo/nodered:${EVEREST_IMAGE_TAG}
